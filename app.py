@@ -52,5 +52,5 @@ def app():
     if uploaded_file is not None:
         captions, frames = generate_captions(uploaded_file)
 
-if _name_ == "_main_":
-    app()
+if __name__ == "__main__":
+    app()
