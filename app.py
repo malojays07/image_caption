@@ -71,5 +71,5 @@ def app():
         video = temporaryVideo(uploaded_file)
         captions, frames = generate_captions(uploaded_file)
 
-if _name_ == "_app_":
+if _name_ == "__app__":
     app()
