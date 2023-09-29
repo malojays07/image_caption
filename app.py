@@ -11,10 +11,10 @@ import tempfile
 def splitVideo(video):
     frames_dir = tempfile.mkdtemp()  # Create a temporary directory to store frames
     cap = cv2.VideoCapture(video)
-     try:
+    try:
         if not os.path.exists('frames'):
 
-            os.makedirs('frames', exist_ok=True)
+        os.makedirs('frames', exist_ok=True)
     except OSError:
         print('Error: Creating directory failed')
     i = 0
