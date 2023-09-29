@@ -1,45 +1,30 @@
 import shutil
-from numpy import object_
 import streamlit as st
-import io
 import cv2
 from keras.preprocessing import image
 from keras.applications import vgg16
 from os import listdir
 from os.path import isfile, join
 from PIL import Image
-
-def temporaryVideo(video):
-    if video is not None:
-        IOBytes = io.BytesIO(video.read())
-        temporary_location = ".video.mp4"
-        with open(temporary_location, 'wb') as vid:
-            vid.write(IOBytes.read())
-        vid.close()
-        return temporary_location
+import tempfile
 
 def splitVideo(video):
-    file = temporaryVideo(video)
-    cap = cv2.VideoCapture(file)
-    try:
-        if not os.path.exists('frames'):
-            os.makedirs('frames', exist_ok=True)
-    except OSError:
-        print('Error: Creating directory failed')
-
+    frames_dir = tempfile.mkdtemp()  # Create a temporary directory to store frames
+    cap = cv2.VideoCapture(video)
     i = 0
-    while(cap.isOpened()):
+    while (cap.isOpened()):
         ret, frame = cap.read()
         if ret == False:
             break
-        path = f'./frames/{str(i)}.jpg'
+        path = f'{frames_dir}/{str(i)}.jpg'
         cv2.imwrite(path, frame)
         i += 1
+    return frames_dir
 
 def generate_captions(video):
-    splitVideo(video)
+    frames_dir = splitVideo(video)
     captions = []
-    frames = [join('./frames', f) for f in listdir('./frames') if isfile(join('./frames', f))]
+    frames = [join(frames_dir, f) for f in listdir(frames_dir) if isfile(join(frames_dir, f))]
     model = vgg16.VGG16(weights='imagenet')
     for i in range(len(frames)):
         img = image.load_img(frames[i], target_size=(224, 224))  # load an image from file
@@ -52,13 +37,10 @@ def generate_captions(video):
         captions.append(caption)
         st.info(caption)
         st.image(frames[i], caption=caption)
+    shutil.rmtree(frames_dir)  # Remove the temporary frames directory
     return captions, frames
 
 def app():
-    if os.path.exists('./frames'):
-        shutil.rmtree('./frames')
-    else:
-        os.mkdir('frames')
     st.header("Upload Video")
     st.info("Video must be less than 2MB")
 
@@ -68,8 +50,7 @@ def app():
         return
 
     if uploaded_file is not None:
-        video = temporaryVideo(uploaded_file)
         captions, frames = generate_captions(uploaded_file)
 
-if __name__ == "__app__":
-    app()
+if _name_ == "_main_":
+    app()
