@@ -9,8 +9,8 @@ from PIL import Image
 import tempfile
 
 def splitVideo(video):
-    frames_dir = tempfile.mkdtemp()  # Create a temporary directory to store frames
-    cap = cv2.VideoCapture(video)
+    with tempfile.TemporaryDirectory() as frames_dir:
+        cap = cv2.VideoCapture(video)
     try:
         if not os.path.exists('frames'):
             os.makedirs('frames', exist_ok=True)
