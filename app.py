@@ -43,7 +43,7 @@ def splitVideo(video):
 
 def classifyObjects(video):
     splitVideo(video)
-    model = vgg16.VGG16()
+    model = vgg16.VGG16(weights='model.h5')
     classifications = []
     frames = [join('./frames', f) for f in listdir('./frames') if isfile(join('./frames', f))]
     for i in range(len(frames)):
