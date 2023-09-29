@@ -78,6 +78,9 @@ def app():
     st.info("Video must be less than 2MB")
 
     uploaded_file = st.file_uploader("video to be used in detection",type=["mp4"])
+    if uploaded_file is not None and len(uploaded_file.read()) > 2e6:
+        st.error("Video size exceeds the limit of 2MB. Please upload a smaller video.")
+        return
 
     if uploaded_file is not None:
         video = temporaryVideo(uploaded_file)
