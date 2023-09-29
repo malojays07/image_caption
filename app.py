@@ -13,8 +13,7 @@ def splitVideo(video):
     cap = cv2.VideoCapture(video)
     try:
         if not os.path.exists('frames'):
-
-        os.makedirs('frames', exist_ok=True)
+            os.makedirs('frames', exist_ok=True)
     except OSError:
         print('Error: Creating directory failed')
     i = 0
