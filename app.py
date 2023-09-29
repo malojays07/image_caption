@@ -46,10 +46,10 @@ def generate_captions(video):
     return captions, frames
 
 def app():
-    st.header("Upload Video")
+    st.header("Upload Video For Image Captioning")
     st.info("Video must be less than 2MB")
 
-    uploaded_file = st.file_uploader("Video to be used in detection", type=["mp4"])
+    uploaded_file = st.file_uploader("Video to be used in the Captioning", type=["mp4"])
     if uploaded_file is not None and len(uploaded_file.read()) > 2e6:
         st.error("Video size exceeds the limit of 2MB. Please upload a smaller video.")
         return
